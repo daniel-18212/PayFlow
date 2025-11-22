@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card shadow p-4" style="max-width: 400px; width: 100%; border-radius: 1rem;">
+        <h2 class="mb-3 text-center">Troca de Senha Obrigatória</h2>
+        <p class="text-body text-center mb-3">Por segurança, defina uma nova senha para acessar o sistema.</p>
+        <form method="post" autocomplete="off">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="nova_senha1" class="form-label">Nova senha</label>
+                <input type="password" name="nova_senha1" id="nova_senha1" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="nova_senha2" class="form-label">Confirme a nova senha</label>
+                <input type="password" name="nova_senha2" id="nova_senha2" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mt-2">Salvar nova senha</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

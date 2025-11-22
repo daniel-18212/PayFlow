@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+{% load brcurrency %}
+
+{% block content %}
+<div class="row mb-4 text-center">
+    <div class="col-md-4 mb-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">A Pagar (Em Dia)</h5>
+                <p class="card-text fs-4 fw-bold">R$ {{ total_em_dia|brcurrency }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card text-white bg-danger">
+            <div class="card-body">
+                <h5 class="card-title">Total Vencido</h5>
+                <p class="card-text fs-4 fw-bold">R$ {{ total_vencido|brcurrency }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Quitado (Este Mês)</h5>
+                <p class="card-text fs-4 fw-bold">R$ {{ total_quitado_mes|brcurrency }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2 class="mb-1">{% if form.instance.pk %}Editar Conta{% else %}Nova Conta{% endif %}</h2>
+        <p class="text-muted">Preencha os campos abaixo para cadastrar uma nova conta a pagar. Campos com <span
+                class="text-danger">*</span> são obrigatórios.</p>
+    </div>
+    <a href="{% url 'lista_contas' %}" class="btn btn-outline-secondary"><i class="fas fa-arrow-left me-2"></i>Voltar
+        para lista</a>
+</div>
+
+<form method="post" id="contaForm" class="p-4 border rounded bg-light shadow-sm" novalidate>
+    {% csrf_token %}
+    {{ form|crispy }}
+    <div class="d-grid gap-2 mt-4">
+        <button type="submit" class="btn btn-success btn-lg" id="btnSalvar">
+            <i class="fas fa-save me-2"></i>Salvar
+        </button>
+    </div>
+</form>
+{% endblock %}

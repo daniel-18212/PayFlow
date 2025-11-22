@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+{% load brcurrency %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-check-circle me-2"></i>
+                        Quitar Conta
+                    </h4>
+                </div>
+                <div class="card-body">
+                    {% if conta_vencida %}
+                    <div class="alert alert-warning">
+                        <h5 class="alert-heading">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Conta Vencida - Atualização de Valor
+                        </h5>
+                        <p class="mb-0">Esta conta está vencida. Por favor, informe o valor atualizado com juros e multa antes de quitar.</p>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info">
+                        <h5 class="alert-heading">Confirmar Quitação</h5>
+                        <p class="mb-0">Você está prestes a marcar a seguinte conta como quitada:</p>
+                    </div>
+                    {% endif %}
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-md-6 mb-3">
+                            <strong>Descrição:</strong>
+                            <p class="text-muted mb-0">{{ conta.descricao }}</p>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <strong>Valor Original:</strong>
+                            <p class="{% if conta_vencida %}text-warning{% else %}text-success{% endif %} fw-bold mb-0">R$ {{ conta.valor|brcurrency }}</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-md-6 mb-3">
+                            <strong>Vencimento:</strong>
+                            <p class="text-muted mb-0">{{ conta.vencimento|date:"d/m/Y" }}</p>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                            <strong>Categoria:</strong>
+                            <p class="text-muted mb-0">{{ conta.categoria }}</p>
+                        </div>
+                    </div>
+
+                    {% if conta.observacao %}
+                    <div class="mb-3">
+                        <strong>Observação Original:</strong>
+                        <p class="text-muted mb-0">{{ conta.observacao }}</p>
+                    </div>
+                    {% endif %}
+
+                    <hr>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+
+                        <div class="d-flex flex-column flex-sm-row justify-content-between gap-2 mt-4">
+                            <a href="{% url 'lista_contas' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-check me-2"></i>Confirmar Quitação
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 15px;
+    }
+
+    .card-header {
+        border-radius: 15px 15px 0 0 !important;
+        border-bottom: none;
+    }
+
+    .alert {
+        border-radius: 10px;
+        border: none;
+    }
+
+    .btn {
+        border-radius: 8px;
+        padding: 10px 20px;
+    }
+
+    .form-control,
+    .form-select {
+        border-radius: 8px;
+    }
+</style>
+{% endblock %}

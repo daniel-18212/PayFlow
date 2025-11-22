@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card shadow p-4" style="max-width: 400px; width: 100%; border-radius: 1rem;">
+        <div class="text-center mb-3">
+            <i class="fas fa-user-plus fa-3x text-success mb-2"></i>
+            <h2 class="mb-1">Criar Conta</h2>
+            <p class="text-body mb-2" style="font-size: 1rem;">Preencha os campos abaixo para criar seu acesso.</p>
+        </div>
+        <form method="post" autocomplete="off">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="id_username" class="form-label">Usuário</label>
+                {{ form.username }}
+            </div>
+            <div class="mb-3">
+                <label for="id_email" class="form-label">E-mail</label>
+                {{ form.email }}
+            </div>
+            <div class="mb-3">
+                <label for="id_senha1" class="form-label">Senha</label>
+                {{ form.senha1 }}
+            </div>
+            <div class="mb-3">
+                <label for="id_senha2" class="form-label">Confirme a senha</label>
+                {{ form.senha2 }}
+            </div>
+            <button type="submit" class="btn btn-success w-100 mt-2">Criar Conta</button>
+        </form>
+        <div class="text-center mt-3">
+            <a href="{% url 'login' %}" class="link-secondary">Voltar para login</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

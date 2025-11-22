@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Contas Quitadas</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 10pt;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 15px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 18pt;
+            color: #0d6efd;
+        }
+        .header p {
+            margin: 5px 0;
+            font-size: 9pt;
+            color: #666;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 9pt;
+        }
+        thead {
+            background-color: #333;
+            color: white;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            font-weight: bold;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            font-size: 8pt;
+            color: #666;
+        }
+        .parcela-info {
+            font-size: 8pt;
+            color: #666;
+            font-style: italic;
+        }
+        .info-pagamento {
+            font-size: 8pt;
+            color: #666;
+            max-width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Histórico de Contas Quitadas</h1>
+        <p>Gerado em: {{ data_geracao|date:"d/m/Y H:i" }}</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Descrição</th>
+                <th class="text-right">Valor Pago</th>
+                <th>Vencimento</th>
+                <th>Categoria</th>
+                <th>Data de Quitação</th>
+                <th>Informações do Pagamento</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for conta in contas %}
+            <tr>
+                <td>
+                    {{ conta.descricao }}
+                    {% if conta.total_parcelas > 1 %}
+                    <div class="parcela-info">Parcela {{ conta.numero_parcela }}/{{ conta.total_parcelas }}</div>
+                    {% endif %}
+                </td>
+                <td class="text-right">R$ {{ conta.valor|floatformat:2 }}</td>
+                <td>{{ conta.vencimento|date:"d/m/Y" }}</td>
+                <td>{{ conta.categoria.nome }}</td>
+                <td>{{ conta.atualizado_em|date:"d/m/Y H:i" }}</td>
+                <td class="info-pagamento">
+                    {% if conta.info_pagamento %}
+                    {{ conta.info_pagamento|truncatewords:15 }}
+                    {% else %}
+                    <span style="color: #999;">Sem informações</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 20px;">
+                    Nenhuma conta quitada encontrada.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>
+
